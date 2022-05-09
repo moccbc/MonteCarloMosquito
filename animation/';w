@@ -1,0 +1,102 @@
+var canvas = document.getElementById("canv");
+var context = canvas.getContext("2d");
+var cx = 1000;
+var cy = 1000;
+var n = 100;
+var mosquitoDays = 10;
+var runs = 0;
+var days = 0;
+var mx = 1000;
+var my = 1000;
+var hx = 1000;
+var hy = 750;
+var pmx = mx;
+var pmy = my;
+var kills = 0;
+
+var intervalID;
+function init() {
+    initDraw();
+    intervalID = setInterval(draw, 10);
+    console.log("kills: ", kills);
+}
+
+function initDraw() {
+    days = 0;
+    pmx = 1000;
+    pmy = 1000;
+    mx = 1000;
+    my = 1000;
+    context.clearRect(0,0,2000,2000);
+    // Draw a frame
+    context.fillStyle = "black";
+    context.lineWidth = 15;
+    context.strokeRect(0,0,2000,2000);
+
+    // Draw 1000m circle
+    context.beginPath();
+    context.fillStyle = "#f1c2f0";
+    context.arc(cx, cy, 500, 0, Math.PI*2);
+    context.closePath();
+    context.fill();
+
+    // Draw human circle
+    context.beginPath();
+    context.fillStyle = "#cf860e";
+    context.arc(hx, hy, 50, 0, Math.PI*2);
+    context.closePath();
+    context.fill();
+
+    // Draw mosquito
+    context.beginPath();
+    context.fillStyle = "rgb(200,0,200)";
+    context.arc(mx, my, 5, 0, Math.PI*2);
+    context.closePath();
+    context.fill();
+}
+
+function draw() {
+    if (days < mosquitoDays) {
+        // Get new angle
+        let angle = Math.floor(Math.random() * 361);
+        mx += 250*Math.cos(angle * Math.PI / 180);
+        my += 250*Math.sin(angle * Math.PI / 180);
+        // console.log(angle);
+        // console.log(mx, my);
+
+        // Draw mosquito
+        context.beginPath();
+        context.fillStyle = "rgb(200,0,200)";
+        context.arc(mx, my, 3, 0, Math.PI*2);
+        context.closePath();
+        context.fill();
+
+        // Draw path mosquito takes
+        context.lineWidth = 2;
+        context.beginPath();
+        context.moveTo(pmx, pmy);
+        context.lineTo(mx, my);
+        context.stroke();
+
+        // Check if the mosquito found the human
+        if (Math.pow((mx - hx),2) + Math.pow((my - hy),2) <= Math.pow(50,2)) {
+            console.log("kill!");
+            kills += 1;
+            initDraw();
+        }
+        else {
+            pmx = mx;
+            pmy = my;
+        }
+    }
+    days += 1;
+    if (days == mosquitoDays) {
+        runs += 1;
+        if (runs < n) {
+            initDraw();
+        }
+        else {
+            clearInterval(intervalID);
+        }
+    }
+}

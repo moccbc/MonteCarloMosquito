@@ -1,0 +1,37 @@
+var canvas = document.getElementById("canv");
+var context = canvas.getContext("2d");
+var cx = 500;
+var cy = 500;
+var mosquitoDays = 0;
+var mx = 500;
+var my = 500;
+
+function init() {
+    context.fillStyle = "black";
+    context.lineWidth = 15;
+    context.strokeRect(0,0,1000,1000);
+
+    context.beginPath();
+    context.fillStyle = "rgb(0,0,200)";
+    context.arc(cx, cy, 250, 0, Math.PI*2);
+    context.closePath();
+    context.fill();
+    setInterval(draw, 20);
+}
+
+function draw() {
+    if (mosquitoDays < 10) {
+        context.beginPath();
+        context.fillStyle = "rgb(200,0,200)";
+        context.arc(mx, my, 1, 0, Math.PI*2);
+        context.closePath();
+        context.fill();
+
+        let angle = Math.floor(Math.random() * 361);
+        mx += 125*Math.cos(angle * Math.PI / 180);
+        my += 125*Math.sin(angle * Math.PI / 180);
+        console.log(angle);
+        console.log(mx, my);
+    }
+    mosquitoDays += 1;
+}
