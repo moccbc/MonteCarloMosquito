@@ -16,7 +16,6 @@ int main() {
     uniform_real_distribution<double> unif(0, 360);
 
     double hx = 0.0, hy = 250.0;
-
     int kill = 0, die = 0;
     int n = 10000;
     cin >> n;
@@ -39,19 +38,13 @@ int main() {
             mx = 250.0 * cos(angle * M_PI / 180.0) + mx;
             my = 250.0 * sin(angle * M_PI / 180.0) + my;
         }
-        if (!found) {
-            if (sqr(mx) + sqr(my) > sqr(1000.0)) {
-                die++;
-            }
-        }
+        if (!found && (sqr(mx) + sqr(my) > sqr(1000.0)))
+            die++;
     }
 
     cout << "Total Runs: " << n << endl;
-    cout << "Probability of kill: "
-         << fixed << setprecision(5)
+    cout << "Probability of kill: " << fixed << setprecision(5)
          << kill/double(n) << endl;
-
-    cout << "Probability of death outside 1km: "
-         << fixed << setprecision(5)
+    cout << "Probability of death outside 1km: " << fixed << setprecision(5)
          << die/double(n) << endl;
 }
